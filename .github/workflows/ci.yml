@@ -1,4 +1,4 @@
-name: ci
+name: Tests
 
 on: [pull_request, push]
 
@@ -10,7 +10,6 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build
         uses: docker/build-push-action@v3
-
   src:
     runs-on: ubuntu-latest
     steps:
@@ -33,13 +32,13 @@ jobs:
         uses: actions/checkout@v3
       - name: Build
         run: |
-          cd $GITHUB_WORKSPACE/tcma-tester/
+          cd jpo-security-svcs/
           ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent package
           ./mvnw org.jacoco:jacoco-maven-plugin:report package
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
-          name: telematic-cloud-messaging
+          name: tmca-tester
           path: tcma-tester/target
           if-no-files-found: error
 
@@ -66,19 +65,19 @@ jobs:
           cat <<EOF > /tmp/sonar-scanner.properties
           sonar.host.url=https://sonarcloud.io
           sonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/tmca-tester/target/site/jacoco/jacoco.xml
-          sonar.exclusions=**/__init__.py,**/*test*.py,**/test/**
-          sonar.coverage.exclusions=**/__init__.py,**/*test*.py,**/test/**
+          #sonar.exclusions=**/__init__.py,**/*test*.py,**/test/**
+          #sonar.coverage.exclusions=**/__init__.py,**/*test*.py,**/test/**
           sonar.java.binaries=$GITHUB_WORKSPACE/tmca-tester/target/
-          sonar.javascript.lcov.reportPaths=web_app_client/lcov.info
+          #sonar.javascript.lcov.reportPaths=web_app_client/lcov.info
           sonar.modules=src,tmca-tester
           sonar.projectBaseDir=$GITHUB_WORKSPACE
           sonar.projectKey=usdot-jpo-ode_jpo-security-svcs
           sonar.organization=usdot-jpo-ode-1
-          sonar.projectName=cda-telematics
+          #sonar.projectName=cda-telematics
           tmca-tester.sonar.projectBaseDir=$GITHUB_WORKSPACE/tmca-tester
           tmca-tester.sonar.sources=src
           sonar.modules=jpo-security-svcs
-          jpo-security-svcs.sonar.projectBaseDir          = $GITHUB_WORKSPACE/jpo-security-svcs
+          jpo-security-svcs.sonar.projectBaseDir  = $GITHUB_WORKSPACE
           jpo-security-svcs.sonar.sources         = src
           EOF
       - name: Run SonarScanner
