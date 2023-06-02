@@ -32,7 +32,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Build
         run: |
-          cd jpo-security-svcs/
+          cd $GITHUB_WORKSPACE
+          ls -la $$ pwd
           ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent package
           ./mvnw org.jacoco:jacoco-maven-plugin:report package
       - name: Archive code coverage results
