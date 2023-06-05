@@ -49,7 +49,7 @@ jobs:
             cd $GITHUB_WORKSPACE/tmca-tester
             ls -la && pwd
             npm fund
-            npm install -g nodemon
+            npm install 
             npm run test
             npm init -y
             npm audit fix --force
@@ -58,7 +58,7 @@ jobs:
           uses: actions/upload-artifact@v3
           with:
             name: tmca-tester
-            path: $GITHUB_WORKSPACE/jpo-security-svcs/jpo-security-svcs/tmca-tester/coverage/*
+            path: $GITHUB_WORKSPACE/tmca-tester/coverage/*
             if-no-files-found: error        
   sonar:
     needs: [src, tmca-tester_coverage]
