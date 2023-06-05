@@ -46,7 +46,7 @@ jobs:
        uses: actions/upload-artifact@v3
        with:
          name: jpo-security-svcs
-         path: . /target
+         path: . /jpo-security-svcs/target
          if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
