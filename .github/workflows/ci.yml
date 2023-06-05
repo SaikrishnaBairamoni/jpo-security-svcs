@@ -46,7 +46,7 @@ jobs:
        uses: actions/upload-artifact@v3
        with:
          name: jpo-security-svcs
-         path: jpo-security-svcs/jpo-security-svcs/target
+         path: . /target
          if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
         - name: Build
           run: |
             ls -la && pwd
-            cd /jpo-security-svcs/tmca-tester 
+            cd /tmca-tester 
             npm install -g nodemon
             npm init -y
             npm install --force
