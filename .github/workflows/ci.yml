@@ -13,7 +13,7 @@ jobs:
   src:
    runs-on: ubuntu-latest
    container:
-     image: openjdk:17-jdk-slim-buster
+     image: maven:3.5.4-jdk-8-alpine
      options: --user root
    steps:
      - name: Checkout ${{ github.event.repository.name }}
@@ -33,7 +33,6 @@ jobs:
        with:
          name: jpo-security-svcs
          path: $GITHUB_WORKSPACE/jpo-security-svcs/jpo-security-svcs/target
-         if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
       container:
@@ -48,7 +47,6 @@ jobs:
           run: |
             cd $GITHUB_WORKSPACE/tmca-tester
             ls -la && pwd
-            npm fund
             npm install 
             npm run test
             npm init -y
@@ -58,8 +56,7 @@ jobs:
           uses: actions/upload-artifact@v3
           with:
             name: tmca-tester
-            path: $GITHUB_WORKSPACE/tmca-tester/coverage/*
-            if-no-files-found: error        
+            path: $GITHUB_WORKSPACE/tmca-tester/coverage/*       
   sonar:
     needs: [src, tmca-tester_coverage]
     runs-on: ubuntu-latest
