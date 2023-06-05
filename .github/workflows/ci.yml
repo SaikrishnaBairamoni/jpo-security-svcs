@@ -48,10 +48,10 @@ jobs:
             cd $GITHUB_WORKSPACE/tmca-tester
             ls -la && pwd
             npm install node-menu@1.3.2
-            npm install 
-            npm run test
+            npm install -g nodemon
             npm init -y
-            npm audit fix --force
+            npm install --force
+            node tmca-tester.js
             npm test -- --coverage || true
         - name: Archive code coverage results
           uses: actions/upload-artifact@v3
