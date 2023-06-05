@@ -61,7 +61,7 @@ jobs:
         - name: Build
           run: |
             ls -la && pwd
-            cd $GITHUB_WORKSPACE/jpo-security-svcs/jpo-security-svcs/tmca-tester 
+            cd $GITHUB_WORKSPACE/tmca-tester
             npm install -g nodemon
             npm init -y
             npm install --force
