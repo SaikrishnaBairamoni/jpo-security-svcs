@@ -62,16 +62,18 @@ jobs:
           run: |
             ls -la && pwd
             cd $GITHUB_WORKSPACE/tmca-tester
+            npm fund
             npm install -g nodemon
             npm init -y
             npm install --force
+            npm audit fix --force
             npm test -- --coverage || true
-        - name: Archive code coverage results
-          uses: actions/upload-artifact@v3
-          with:
-            name: tmca-tester
-            path: jpo-security-svcs/tmca-tester/coverage/*
-            if-no-files-found: error        
+        #- name: Archive code coverage results
+          #uses: actions/upload-artifact@v3
+          #with:
+            #name: tmca-tester
+            #path: jpo-security-svcs/tmca-tester/coverage/*
+            #if-no-files-found: error        
   sonar:
     needs: [src, tmca-tester_coverage]
     runs-on: ubuntu-latest
