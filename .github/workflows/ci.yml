@@ -42,12 +42,12 @@ jobs:
          ls -ls && pwd
          mvn -e -X clean org.jacoco:jacoco-maven-plugin:prepare-agent package
          mvn -e -X clean org.jacoco:jacoco-maven-plugin:report package
-     - name: Archive code coverage results
-       uses: actions/upload-artifact@v3
-       with:
-         name: jpo-security-svcs
-         path: . /jpo-security-svcs/target
-         if-no-files-found: error
+     #- name: Archive code coverage results
+       #uses: actions/upload-artifact@v3
+       #with:
+         #name: jpo-security-svcs
+         #path: . /jpo-security-svcs/target
+         #if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
       container:
