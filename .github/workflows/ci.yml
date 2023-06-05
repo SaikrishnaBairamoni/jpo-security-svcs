@@ -10,40 +10,63 @@ jobs:
         uses: docker/setup-buildx-action@v2
       - name: Build
         uses: docker/build-push-action@v3
+  #src:
+    #runs-on: ubuntu-latest
+    #steps:
+      #- uses: actions/checkout@v3
+        #with:
+          #submodules: recursive
+      #- name: Set up JDK
+        #uses: actions/setup-java@v3
+        #with:
+          #java-version: "11"
+          #distribution: "temurin"
+      #- name: Run maven test
+        #run: |
+          #mvn test
   src:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: "11"
-          distribution: "temurin"
-
+   runs-on: ubuntu-latest
+   container:
+     image: openjdk:17-jdk-slim-buster
+     options: --user root
+   steps:
+     - name: Checkout ${{ github.event.repository.name }}
+       uses: actions/checkout@v3
+     - name: Build
+       run: |
+         cd $GITHUB_WORKSPACE
+         ls -ls && pwd
+         mvn -e -X clean org.jacoco:jacoco-maven-plugin:prepare-agent package
+         mvn -e -X clean org.jacoco:jacoco-maven-plugin:report package
+     - name: Archive code coverage results
+       uses: actions/upload-artifact@v3
+       with:
+         name: jpo-security-svcs
+         path: jpo-security-svcs/src/target
+         if-no-files-found: error
   tmca-tester_coverage:
-    runs-on: ubuntu-latest
-    container:
-      image: openjdk:17-jdk-slim-buster
-      options: --user root
-    steps:
-      - name: Checkout ${{ github.event.repository.name }}
-        uses: actions/checkout@v3
-      - name: Build
-        run: |
-          ls -la && pwd
-          cd $GITHUB_WORKSPACE
-          ls -la && pwd
-          ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent package
-          ./mvnw org.jacoco:jacoco-maven-plugin:report package
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: tmca-tester
-          path: tcma-tester/target
-          if-no-files-found: error
-
+      runs-on: ubuntu-latest
+      container:
+        image: node:16.16.0
+        options: --user root
+        env:
+          CI: true
+      steps:
+        - name: Checkout ${{ github.event.repository.name }}
+          uses: actions/checkout@v3
+        - name: Build
+          run: |
+            cd $GITHUB_WORKSPACE/jpo-security-svcs/tmca-tester
+            npm install -g nodemon
+            npm init -y
+            npm install --force
+            npm test -- --coverage || true
+        - name: Archive code coverage results
+          uses: actions/upload-artifact@v3
+          with:
+            name: tmca-tester
+            path: jpo-security-svcs/tmca-tester/coverage/*
+            if-no-files-found: error        
   sonar:
     needs: [src, tmca-tester_coverage]
     runs-on: ubuntu-latest
@@ -56,8 +79,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: tmca-tester
-          path: tmca-tester/target
-
+          path: tmca-tester
+      - name: Download code coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: jpo-security-svcs
+          path: jpo-security-svcs/src/target  
       - name: Setup SonarScanner
         uses: warchant/setup-sonar-scanner@v4
         with:
@@ -67,15 +94,12 @@ jobs:
           cat <<EOF > /tmp/sonar-scanner.properties
           sonar.host.url=https://sonarcloud.io
           sonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/tmca-tester/target/site/jacoco/jacoco.xml
-          #sonar.exclusions=**/__init__.py,**/*test*.py,**/test/**
-          #sonar.coverage.exclusions=**/__init__.py,**/*test*.py,**/test/**
           sonar.java.binaries=$GITHUB_WORKSPACE/tmca-tester/target/
-          #sonar.javascript.lcov.reportPaths=web_app_client/lcov.info
+          sonar.javascript.lcov.reportPaths=tmca-tester/lcov.info
           sonar.modules=src,tmca-tester
           sonar.projectBaseDir=$GITHUB_WORKSPACE
           sonar.projectKey=usdot-jpo-ode_jpo-security-svcs
           sonar.organization=usdot-jpo-ode-1
-          #sonar.projectName=cda-telematics
           tmca-tester.sonar.projectBaseDir=$GITHUB_WORKSPACE/tmca-tester
           tmca-tester.sonar.sources=src
           sonar.modules=jpo-security-svcs
