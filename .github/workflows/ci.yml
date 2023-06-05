@@ -46,7 +46,7 @@ jobs:
        uses: actions/upload-artifact@v3
        with:
          name: jpo-security-svcs
-         path: jpo-security-svcs/src/target
+         path: jpo-security-svcs/jpo-security-svcs/target
          if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
@@ -89,7 +89,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: jpo-security-svcs
-          path: jpo-security-svcs/src/target  
+          path: jpo-security-svcs/jpo-security-svcs/target 
       - name: Setup SonarScanner
         uses: warchant/setup-sonar-scanner@v4
         with:
@@ -99,7 +99,7 @@ jobs:
           cat <<EOF > /tmp/sonar-scanner.properties
           sonar.host.url=https://sonarcloud.io
           sonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/tmca-tester/target/site/jacoco/jacoco.xml
-          sonar.java.binaries=$GITHUB_WORKSPACE/tmca-tester/target/
+          sonar.java.binaries=$GITHUB_WORKSPACE/jpo-security-svcs/target
           sonar.javascript.lcov.reportPaths=tmca-tester/lcov.info
           sonar.modules=src,tmca-tester
           sonar.projectBaseDir=$GITHUB_WORKSPACE
