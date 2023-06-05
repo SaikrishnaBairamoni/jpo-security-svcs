@@ -32,6 +32,10 @@ jobs:
    steps:
      - name: Checkout ${{ github.event.repository.name }}
        uses: actions/checkout@v3
+     - name: Set up Maven
+       uses: stCarolas/setup-maven@v4.5
+       with:
+        maven-version: 3.8.2      
      - name: Build
        run: |
          cd $GITHUB_WORKSPACE
@@ -56,7 +60,8 @@ jobs:
           uses: actions/checkout@v3
         - name: Build
           run: |
-            cd $GITHUB_WORKSPACE/jpo-security-svcs/tmca-tester
+            ls -la && pwd
+            cd /jpo-security-svcs/tmca-tester 
             npm install -g nodemon
             npm init -y
             npm install --force
