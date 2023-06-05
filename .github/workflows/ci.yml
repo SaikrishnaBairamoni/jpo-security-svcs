@@ -42,12 +42,12 @@ jobs:
          ls -ls && pwd
          mvn -e -X clean org.jacoco:jacoco-maven-plugin:prepare-agent package
          mvn -e -X clean org.jacoco:jacoco-maven-plugin:report package
-     #- name: Archive code coverage results
-       #uses: actions/upload-artifact@v3
-       #with:
-         #name: jpo-security-svcs
-         #path: . /jpo-security-svcs/target
-         #if-no-files-found: error
+     - name: Archive code coverage results
+       uses: actions/upload-artifact@v3
+       with:
+         name: jpo-security-svcs
+         path: $GITHUB_WORKSPACE/target
+         if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
       container:
@@ -68,12 +68,12 @@ jobs:
             npm install --force
             npm audit fix --force
             npm test -- --coverage || true
-        #- name: Archive code coverage results
-          #uses: actions/upload-artifact@v3
-          #with:
-            #name: tmca-tester
-            #path: jpo-security-svcs/tmca-tester/coverage/*
-            #if-no-files-found: error        
+        - name: Archive code coverage results
+          uses: actions/upload-artifact@v3
+          with:
+            name: tmca-tester
+            path: $GITHUB_WORKSPACE/tmca-tester/coverage/*
+            if-no-files-found: error        
   sonar:
     needs: [src, tmca-tester_coverage]
     runs-on: ubuntu-latest
