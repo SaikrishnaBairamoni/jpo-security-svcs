@@ -32,7 +32,7 @@ jobs:
        uses: actions/upload-artifact@v3
        with:
          name: jpo-security-svcs
-         path: $GITHUB_WORKSPACE/jpo-security-svcs/jpo-security-svcs/target
+         path: /__w/jpo-security-svcs/jpo-security-svcs/target
   tmca-tester_coverage:
       runs-on: ubuntu-latest
       container:
@@ -57,7 +57,7 @@ jobs:
           uses: actions/upload-artifact@v3
           with:
             name: tmca-tester
-            path: $GITHUB_WORKSPACE/tmca-tester/coverage/*       
+            path: /__w/jpo-security-svcs/jpo-security-svcs/tmca-tester/coverage/*       
   sonar:
     needs: [src, tmca-tester_coverage]
     runs-on: ubuntu-latest
@@ -66,16 +66,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      #- name: Download code coverage results
-        #uses: actions/download-artifact@v3
-        #with:
-          #name: tmca-tester
-          #path: tmca-tester
-      #- name: Download code coverage results
-        #uses: actions/download-artifact@v3
-        #with:
-          #name: jpo-security-svcs
-          #path: jpo-security-svcs/jpo-security-svcs/target 
+      - name: Download code coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: tmca-tester
+          path: /__w/jpo-security-svcs/jpo-security-svcs/tmca-tester
+      - name: Download code coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: jpo-security-svcs
+          path: /__w/jpo-security-svcs/jpo-security-svcs/target 
       - name: Setup SonarScanner
         uses: warchant/setup-sonar-scanner@v4
         with:
