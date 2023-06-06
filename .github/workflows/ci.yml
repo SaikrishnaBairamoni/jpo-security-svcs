@@ -51,7 +51,8 @@ jobs:
             npm install -g nodemon
             npm init -y
             npm install --force
-            node tmca-tester.js
+            npm i
+            node .\tmca-tester.js
             npm test -- --coverage || true
         - name: Archive code coverage results
           uses: actions/upload-artifact@v3
