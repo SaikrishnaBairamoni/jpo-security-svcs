@@ -33,6 +33,7 @@ jobs:
        with:
          name: jpo-security-svcs
          path: /__w/jpo-security-svcs/jpo-security-svcs/target
+         if-no-files-found: error
   tmca-tester_coverage:
       runs-on: ubuntu-latest
       container:
@@ -52,7 +53,6 @@ jobs:
             npm init -y
             npm install --force
             npm i
-            node .\tmca-tester.js
             npm test -- --coverage || true
         - name: Archive code coverage results
           uses: actions/upload-artifact@v3
