@@ -75,7 +75,6 @@ jobs:
           sonar.host.url=https://sonarcloud.io
           sonar.coverage.jacoco.xmlReportPaths=$GITHUB_WORKSPACE/tmca-tester/target/site/jacoco/jacoco.xml
           sonar.java.binaries=$GITHUB_WORKSPACE/jpo-security-svcs/
-          sonar.javascript.lcov.reportPaths=tmca-tester/lcov.info
           sonar.modules=src,tmca-tester
           sonar.projectBaseDir=$GITHUB_WORKSPACE
           sonar.projectKey=usdot-jpo-ode_jpo-security-svcs
