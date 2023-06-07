@@ -53,10 +53,6 @@ jobs:
             npm install -g nodemon
             npm init -y
             npm install --force
-        - name: Checkout ${{ github.event.repository.name }}
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
         - run: chmod +x -R /__w/jpo-security-svcs/jpo-security-svcs/target/         
         - name: Download code coverage results
           uses: actions/download-artifact@v3
