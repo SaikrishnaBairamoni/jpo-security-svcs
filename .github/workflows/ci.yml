@@ -63,10 +63,8 @@ jobs:
           sonar.projectBaseDir=$GITHUB_WORKSPACE
           sonar.projectKey=usdot-jpo-ode_jpo-security-svcs
           sonar.organization=usdot-jpo-ode-1
-          sonar.modules=jpo-security-svcs
           jpo-security-svcs.sonar.projectBaseDir  = home/runner/work/jpo-security-svcs/jpo-security-svcs
           jpo-security-svcs.sonar.sources         = src
-          jpo-security-svcs.sonar.test.inclusions=src/test/**
           EOF
       - name: Run SonarScanner
         uses: usdot-fhwa-stol/actions/sonar-scanner@main
