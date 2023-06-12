@@ -32,6 +32,15 @@ jobs:
          name: jpo-security-svcs
          path: /__w/jpo-security-svcs/jpo-security-svcs/target 
          if-no-files-found: error
+     - name: build tmca-tester
+       uses: actions/setup-node@v3
+       with:
+         node-version: '18.x'
+     - run: |
+         cd $GITHUB_WORKSPACE /tmca-tester
+         npm install 
+         npm run build --if-present
+         npm test          
   sonar:
     needs: [jpo-security-svcs]
     runs-on: ubuntu-latest
@@ -65,6 +74,8 @@ jobs:
           sonar.organization=usdot-jpo-ode-1
           jpo-security-svcs.sonar.projectBaseDir  = home/runner/work/jpo-security-svcs/jpo-security-svcs
           jpo-security-svcs.sonar.sources         = src
+          tmca-tester.sonar.projectBaseDir=$GITHUB_WORKSPACE /tmca-tester
+          tmca-tester.sonar.sources=.
           EOF
       - name: Run SonarScanner
         uses: usdot-fhwa-stol/actions/sonar-scanner@main
