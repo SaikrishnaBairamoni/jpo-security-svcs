@@ -33,14 +33,15 @@ jobs:
          if-no-files-found: error
   tmca-tester:
    runs-on: ubuntu-latest
-   container:
-     image: node:16.16.0    
-     options: --user root
    steps:  
      - name: Checkout ${{ github.event.repository.name }}
        uses: actions/checkout@v3
+     - name: build tmca-tester
+       uses: actions/setup-node@v3
+       with:
+         node-version: '18.x'
      - run: |
-         cd $GITHUB_WORKSPACE /tmca-tester
+         cd /__w/jpo-security-svcs/jpo-security-svcs/tmca-tester
          npm install --force
          npm run build --if-present      
          node ./tmca-tester.js  
