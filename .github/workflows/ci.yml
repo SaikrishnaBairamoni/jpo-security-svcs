@@ -43,7 +43,8 @@ jobs:
        with:
          node-version: '18.x'
      - run: |
-         cd /__w/jpo-security-svcs/jpo-security-svcs/tmca-tester
+         ls -la && pwd 
+         cd tmca-tester
          npm install --force
          npm run build --if-present      
          node ./tmca-tester.js  
